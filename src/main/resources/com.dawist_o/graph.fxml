@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="640.0" style="-fx-background-color: #CCAD8F;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dawist_o.controller.GraphController">
+   <children>
+      <AnchorPane fx:id="vertexField" prefHeight="400.0" prefWidth="360.0" style="-fx-background-color: #7EA3CC;" />
+      <Button layoutX="540.0" layoutY="65.0" mnemonicParsing="false" onAction="#onAddNewVertexButtonPressed" prefHeight="25.0" prefWidth="70.0" text="new" />
+      <TextField fx:id="newVertexTextField" layoutX="410.0" layoutY="65.0" prefHeight="25.0" prefWidth="70.0" />
+      <ComboBox fx:id="sourceVertexBox" layoutX="410.0" layoutY="145.0" prefHeight="25.0" prefWidth="70.0" />
+      <Button layoutX="490.0" layoutY="187.0" mnemonicParsing="false" onAction="#onConnectButtonPressed" prefHeight="25.0" prefWidth="120.0" text="connect" />
+      <Text layoutX="473.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vertex" textAlignment="CENTER" wrappingWidth="80.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text layoutX="473.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edge" textAlignment="CENTER" wrappingWidth="80.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text layoutX="366.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="43.33333333333326">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text layoutX="482.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" textAlignment="CENTER" wrappingWidth="55.33333333333326">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <ComboBox fx:id="receivingVertexBox" layoutX="540.0" layoutY="145.0" prefHeight="25.0" prefWidth="70.0" />
+      <Text layoutX="366.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weigth" wrappingWidth="55.33333333333326">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <TextField fx:id="edgeField" layoutX="420.0" layoutY="187.0" prefHeight="25.0" prefWidth="60.0" />
+      <Button fx:id="showShortestWay" layoutX="410.0" layoutY="258.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="shortest way" />
+   </children>
+</AnchorPane>
