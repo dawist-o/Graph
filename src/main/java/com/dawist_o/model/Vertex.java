@@ -1,10 +1,15 @@
 package com.dawist_o.model;
 
+import java.util.Comparator;
 import java.util.Objects;
 
-public class Vertex {
-    String value;
+public class Vertex implements Comparable<Vertex> {
+    private String value;
     private int weight = 1;
+
+    public String getValue() {
+        return value;
+    }
 
     public Vertex(String value) {
         this.value = value;
@@ -39,5 +44,10 @@ public class Vertex {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public int compareTo(Vertex o) {
+        return Integer.compare(this.weight, o.weight);
     }
 }
