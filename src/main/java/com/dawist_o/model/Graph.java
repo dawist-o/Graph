@@ -1,12 +1,11 @@
 package com.dawist_o.model;
 
+
 import java.util.*;
 
 public class Graph {
-    private Map<Vertex,List<Vertex>> adjecentVertices;
-
     public Graph() {
-        this.adjecentVertices = new HashMap<>();
+        this.adjacentVertices = new HashMap<>();
     }
 
     /**
@@ -15,11 +14,11 @@ public class Graph {
      * @param value value of vertex
      **/
     public void addVertex(String value) {
-        adjecentVertices.put(new Vertex(value),new ArrayList<>());
+        adjacentVertices.put(new Vertex(value), new ArrayList<>());
     }
 
-    public Map<Vertex, List<Vertex>> getAdjecentVertices() {
-        return adjecentVertices;
+    public Map<Vertex, List<Vertex>> getAdjacentVertices() {
+        return adjacentVertices;
     }
 
 
@@ -165,9 +164,11 @@ public class Graph {
      */
     public void removeVertex(String value) {
         Vertex vertexForRemove = new Vertex(value);
-        adjecentVertices.values().forEach(v->v.remove(vertexForRemove));
-        adjecentVertices.remove(vertexForRemove);
+        adjacentVertices.values().forEach(v -> v.remove(vertexForRemove));
+        adjacentVertices.remove(vertexForRemove);
     }
+
+    private Map<Vertex, Boolean> isVisited;
 
     /**
      * Adds edge from first vertex to second with weight
@@ -179,7 +180,7 @@ public class Graph {
     public void addEdge(String value1, String value2, int weight) {
         Vertex v1 = new Vertex(value1);
         Vertex v2 = new Vertex(value2, weight);
-        adjecentVertices.get(v1).add(v2);
+        adjacentVertices.get(v1).add(v2);
     }
 
     /**
@@ -191,7 +192,37 @@ public class Graph {
     public void addEdge(String value1, String value2) {
         Vertex v1 = new Vertex(value1);
         Vertex v2 = new Vertex(value2);
-        adjecentVertices.get(v1).add(v2);
+        adjacentVertices.get(v1).add(v2);
+    }
+
+    private void fillForTest() {
+        this.adjacentVertices.clear();
+        //E : 4(D)
+        adjacentVertices.put(new Vertex("E")
+                , Arrays.asList(
+                        new Vertex("D", 4)));
+        //F :
+        adjacentVertices.put(new Vertex("F")
+                , new ArrayList<>());
+        //C : 3(E)
+        adjacentVertices.put(new Vertex("C")
+                , Arrays.asList(
+                        new Vertex("E", 3)));
+        //D : 11(F)
+        adjacentVertices.put(new Vertex("D")
+                , Arrays.asList(
+                        new Vertex("F", 11)));
+        //A : 4(B) 2(C)
+        adjacentVertices.put(new Vertex("A")
+                , Arrays.asList(
+                        new Vertex("B", 4),
+                        new Vertex("C", 2)));
+        //B : 5(C) 10(D)
+        adjacentVertices.put(new Vertex("B")
+                , Arrays.asList(
+                        new Vertex("C", 5),
+                        new Vertex("D", 10)));
+
     }
 
 }
