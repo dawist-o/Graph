@@ -21,14 +21,13 @@ public class Graph {
         return adjacentVertices;
     }
 
-
-    private Map<Vertex, List<Vertex>> adjacentVertices;
+    private final Map<Vertex, List<Vertex>> adjacentVertices;
     private Set<Vertex> settled;
     private PriorityQueue<Vertex> pq;
     private Map<Vertex, Integer> dist;
 
-    public void getShortestWayBetween(String value1, String value2) {
-        //        fillForTest();
+    public int getShortestPathBetween(String value1, String value2) {
+        //fillForTest();
         //Map of all nodes with path for them
         dist = new LinkedHashMap<>();
         for (Vertex ver : adjacentVertices.keySet()) {
@@ -37,7 +36,7 @@ public class Graph {
         dist.put(new Vertex(value1), 0);
         //adding source node into PriorityQueue
         pq = new PriorityQueue<>();
-        pq.add(getEntry(adjacentVertices, new Vertex(value1)).getKey());
+        pq.add(getEntryByKey(adjacentVertices, new Vertex(value1)).getKey());
         //HashSet for settled nodes
         settled = new HashSet<>();
         //while haven't visited all nodes and pq isn't empty
@@ -47,18 +46,14 @@ public class Graph {
             //current node is visited, so adds it into settled
             settled.add(currentNode);
             //checking all adjacency vertices
-            ifThereAreShorterWays(getEntry(adjacentVertices, currentNode));
+            ifThereAreShorterPaths(getEntryByKey(adjacentVertices, currentNode));
         }
-        if (dist.get(new Vertex(value2)) == Integer.MAX_VALUE) {
-            System.out.printf("There are no way from %s vertex to %s\n", value1, value2);
-        } else {
-            System.out.printf("Shortest distance from %s to %s = %d\n", value1, value2, dist.get(new Vertex(value2)));
-        }
+        return dist.get(new Vertex(value2));
     }
 
-    private void ifThereAreShorterWays(Map.Entry<Vertex, List<Vertex>> vertexEntry) {
-        int edgeDistance = -1;
-        int newDistance = -1;
+    private void ifThereAreShorterPaths(Map.Entry<Vertex, List<Vertex>> vertexEntry) {
+        int edgeDistance;
+        int newDistance;
         //checking all adjacency nodes (neighbours)
         for (Vertex neighbour : vertexEntry.getValue()) {
             //if node isn't visited
@@ -74,84 +69,86 @@ public class Graph {
         }
     }
 
-    public void getLongestWayBetween(String value1, String value2) {
-        //fillForTest();
-        //Map of all nodes with path for them
-        dist = new LinkedHashMap<>();
-        for (Vertex ver : adjacentVertices.keySet()) {
-            dist.put(ver, Integer.MIN_VALUE);
-        }
-        dist.put(new Vertex(value1), 0);
-        //adding source node into PriorityQueue
-        pq = new PriorityQueue<>();
-        pq.add(getEntry(adjacentVertices, new Vertex(value1)).getKey());
-        //HashSet for settled nodes
-        settled = new HashSet<>();
-        //while haven't visited all nodes and pq isn't empty
-        while (settled.size() != adjacentVertices.size() && !pq.isEmpty()) {
-            //getting current node
-            Vertex currentNode = pq.remove();
-            //current node is visited, so adds it into settled
-            settled.add(currentNode);
-            //checking all adjacency vertices
-            ifThereAreLongerWays(getEntry(adjacentVertices, currentNode));
-        }
-/*        if (dist.get(new Vertex(value2)) == Integer.MIN_VALUE) {
-            System.out.printf("There are no way from %s vertex to %s\n", value1, value2);
-        } else {
-            System.out.printf("Longest distance from %s to %s = %d\n", value1, value2, dist.get(new Vertex(value2)));
-        }*/
-    }
-
-    private void ifThereAreLongerWays(Map.Entry<Vertex, List<Vertex>> vertexEntry) {
-        int edgeDistance = -1;
-        int newDistance = -1;
-        //checking all adjacency nodes (neighbours)
-        for (Vertex neighbour : vertexEntry.getValue()) {
-            //if node isn't visited
-            if (!settled.contains(neighbour)) {
-                edgeDistance = neighbour.getWeight();
-                newDistance = dist.get(vertexEntry.getKey()) + edgeDistance;
-                //if this way is shorter than the previous one
-                if (newDistance > dist.get(neighbour)) {
-                    dist.put(neighbour, newDistance);
-                }
-                pq.add(neighbour);
-            }
-        }
-    }
-
-    public void getGraphCenter() {
+    public Vertex getGraphCenter() {
         fillForTest();
-        Map<Vertex, Integer> excentrycityMap = new LinkedHashMap<>();
+        Map<Vertex, Integer> eccentricityMap = new LinkedHashMap<>();
         for (Vertex ver : adjacentVertices.keySet()) {
-            excentrycityMap.put(ver, 0);
+            eccentricityMap.put(ver, 0);
         }
         for (Map.Entry<Vertex, List<Vertex>> external_entry : adjacentVertices.entrySet()) {
             for (Map.Entry<Vertex, List<Vertex>> inner_entry : adjacentVertices.entrySet()) {
-                getShortestWayBetween(external_entry.getKey().getValue(), inner_entry.getKey().getValue());
+                getShortestPathBetween(external_entry.getKey().getValue(), inner_entry.getKey().getValue());
                 for (Map.Entry<Vertex, Integer> distance : dist.entrySet()) {
                     if (distance.getValue() != Integer.MAX_VALUE
-                            && excentrycityMap.get(distance.getKey()) <= distance.getValue()) {
-                        excentrycityMap.put(distance.getKey(), distance.getValue());
+                            && eccentricityMap.get(distance.getKey()) <= distance.getValue()) {
+                        eccentricityMap.put(distance.getKey(), distance.getValue());
                     }
                 }
             }
         }
         Vertex center = null;
         int minEx = Integer.MAX_VALUE;
-        for (Map.Entry<Vertex, Integer> ex : excentrycityMap.entrySet()) {
+        for (Map.Entry<Vertex, Integer> ex : eccentricityMap.entrySet()) {
             System.out.println(ex.getKey().getValue() + ex.getValue());
             if (minEx > ex.getValue()) {
                 center = ex.getKey();
                 minEx = ex.getValue();
             }
         }
-        System.out.println(center.getValue() + minEx);
+        return center;
+    }
+
+    private List<List<Vertex>> allPaths;
+
+    public List<List<Vertex>> getAllPaths(String source, String receiver) {
+        fillForTest();
+        allPaths = new ArrayList<>();
+        Map<Vertex, Boolean> isVisited = new HashMap<>();
+        for (Vertex v : adjacentVertices.keySet()) {
+            isVisited.put(v, false);
+        }
+        ArrayList<Vertex> pathList = new ArrayList<>();
+        pathList.add(getEntryByKey(adjacentVertices, new Vertex(source)).getKey());
+        // Call recursive utility
+        getAllPathsRecursive(source, receiver, isVisited, pathList);
+
+        allPaths.sort(Comparator.comparing(cPath -> cPath.stream().mapToInt(Vertex::getWeight).sum()));
+        Collections.reverse(allPaths);
+
+        return allPaths;
+    }
+
+    private void getAllPathsRecursive(String source, String receiver,
+                                      Map<Vertex, Boolean> isVisited, List<Vertex> localPathList) {
+        if (source.equals(receiver)) {
+            allPaths.add(new ArrayList<>(localPathList));
+            // if match found then no need to traverse more till depth
+            return;
+        }
+        // Mark the current node as visited
+        isVisited.put(new Vertex(source), true);
+        // Recur for all the vertices adjacent to current vertex
+        for (Vertex currentVertex : adjacentVertices.get(new Vertex(source))) {
+            if (!isVisited.get(currentVertex)) {
+                localPathList.add(currentVertex);
+                getAllPathsRecursive(currentVertex.getValue(), receiver, isVisited, localPathList);
+                localPathList.remove(currentVertex);
+            }
+        }
+        // Mark the current node as unvisited for other paths
+        isVisited.put(new Vertex(source), false);
     }
 
 
-    private static <K, V> Map.Entry<K, V> getEntry(Map<K, V> map, K key) {
+    /**
+     * returns entry with K key from Map<K,V> map
+     *
+     * @param map class that implements interface Map
+     * @param key key for entry
+     * @param <K> type of key
+     * @param <V> type of value
+     */
+    private static <K, V> Map.Entry<K, V> getEntryByKey(Map<K, V> map, K key) {
         return map.entrySet()
                 .stream()
                 .filter(kvEntry -> kvEntry.getKey().equals(key)).findFirst().get();
@@ -167,8 +164,6 @@ public class Graph {
         adjacentVertices.values().forEach(v -> v.remove(vertexForRemove));
         adjacentVertices.remove(vertexForRemove);
     }
-
-    private Map<Vertex, Boolean> isVisited;
 
     /**
      * Adds edge from first vertex to second with weight
@@ -199,30 +194,29 @@ public class Graph {
         this.adjacentVertices.clear();
         //E : 4(D)
         adjacentVertices.put(new Vertex("E")
-                , Arrays.asList(
+                , Collections.singletonList(
                         new Vertex("D", 4)));
         //F :
         adjacentVertices.put(new Vertex("F")
                 , new ArrayList<>());
         //C : 3(E)
         adjacentVertices.put(new Vertex("C")
-                , Arrays.asList(
+                , Collections.singletonList(
                         new Vertex("E", 3)));
         //D : 11(F)
         adjacentVertices.put(new Vertex("D")
-                , Arrays.asList(
+                , Collections.singletonList(
                         new Vertex("F", 11)));
         //A : 4(B) 2(C)
         adjacentVertices.put(new Vertex("A")
                 , Arrays.asList(
                         new Vertex("B", 4),
-                        new Vertex("C", 2)));
+                        new Vertex("C", 2),
+                        new Vertex("F", 2)));
         //B : 5(C) 10(D)
         adjacentVertices.put(new Vertex("B")
                 , Arrays.asList(
                         new Vertex("C", 5),
                         new Vertex("D", 10)));
-
     }
-
 }
