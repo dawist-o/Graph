@@ -6,6 +6,20 @@ import java.util.*;
 public class Graph {
     public Graph() {
         this.adjacentVertices = new HashMap<>();
+        //   fillForTest();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Vertex, List<Vertex>> entry : adjacentVertices.entrySet()) {
+            sb.append(entry.getKey()).append(": ");
+            for (Vertex adjV : entry.getValue()) {
+                sb.append(adjV).append(',');
+            }
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 
     /**
@@ -27,7 +41,6 @@ public class Graph {
     private Map<Vertex, Integer> dist;
 
     public int getShortestPathBetween(String value1, String value2) {
-        //fillForTest();
         //Map of all nodes with path for them
         dist = new LinkedHashMap<>();
         for (Vertex ver : adjacentVertices.keySet()) {
@@ -70,7 +83,6 @@ public class Graph {
     }
 
     public Vertex getGraphCenter() {
-        fillForTest();
         Map<Vertex, Integer> eccentricityMap = new LinkedHashMap<>();
         for (Vertex ver : adjacentVertices.keySet()) {
             eccentricityMap.put(ver, 0);
@@ -89,8 +101,7 @@ public class Graph {
         Vertex center = null;
         int minEx = Integer.MAX_VALUE;
         for (Map.Entry<Vertex, Integer> ex : eccentricityMap.entrySet()) {
-            System.out.println(ex.getKey().getValue() + ex.getValue());
-            if (minEx > ex.getValue()) {
+            if (minEx > ex.getValue() && ex.getValue() != 0) {
                 center = ex.getKey();
                 minEx = ex.getValue();
             }
@@ -101,7 +112,6 @@ public class Graph {
     private List<List<Vertex>> allPaths;
 
     public List<List<Vertex>> getAllPaths(String source, String receiver) {
-        fillForTest();
         allPaths = new ArrayList<>();
         Map<Vertex, Boolean> isVisited = new HashMap<>();
         for (Vertex v : adjacentVertices.keySet()) {
@@ -113,7 +123,6 @@ public class Graph {
         getAllPathsRecursive(source, receiver, isVisited, pathList);
 
         allPaths.sort(Comparator.comparing(cPath -> cPath.stream().mapToInt(Vertex::getWeight).sum()));
-        Collections.reverse(allPaths);
 
         return allPaths;
     }
@@ -152,6 +161,10 @@ public class Graph {
         return map.entrySet()
                 .stream()
                 .filter(kvEntry -> kvEntry.getKey().equals(key)).findFirst().get();
+    }
+
+    public void removeEdge(String vertex, String edge) {
+        adjacentVertices.get(new Vertex(vertex)).remove(new Vertex(edge));
     }
 
     /**
