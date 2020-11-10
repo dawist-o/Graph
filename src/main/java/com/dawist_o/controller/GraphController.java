@@ -1,16 +1,13 @@
 package com.dawist_o.controller;
 
-import com.dawist_o.model.Graph;
+import com.dawist_o.model.DGraph;
 import com.dawist_o.model.Vertex;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 
-import java.util.Iterator;
 import java.util.List;
 
 import static com.dawist_o.Main.updateGraphView;
@@ -45,21 +42,21 @@ public class GraphController {
     @FXML
     private TextField edgeWeightField;
 
-    private Graph graph;
+    private DGraph<String, String> DGraph;
 
     @FXML
     void onRemoveEdgePressed(ActionEvent event) {
         if (sourceVertexBox.getValue() == null || receivingVertexBox.getValue() == null) return;
-        System.out.println(graph);
-        graph.removeEdge(sourceVertexBox.getValue(), receivingVertexBox.getValue());
-        System.out.println(graph);
+        System.out.println(DGraph);
+        //DGraph.removeEdge();
+        System.out.println(DGraph);
     }
 
     @FXML
     void onRemoveVertexPressed(ActionEvent event) {
         if (removeVertexBox.getValue() == null) return;
 
-        graph.removeVertex(removeVertexBox.getValue());
+        DGraph.removeVertex(removeVertexBox.getValue());
         sourceVertexBox.getItems().remove(removeVertexBox.getValue());
         receivingVertexBox.getItems().remove(removeVertexBox.getValue());
         removeVertexBox.getItems().remove(removeVertexBox.getValue());
@@ -77,7 +74,7 @@ public class GraphController {
         fillLongestPathTF(allPaths);
         fillAllPathsTA(allPaths);
         graphCenterTF.setText(graph.getGraphCenter().getValue());*/
-        updateGraphView(graph);
+        updateGraphView(DGraph);
     }
 
     private void fillAllPathsTA(List<List<Vertex>> allPaths) {
@@ -102,10 +99,10 @@ public class GraphController {
         try {
             for (Vertex v : path) {
                 if (isFirst) {
-                    shortestPath.append(v.getValue());
+                    shortestPath.append(v);
                     isFirst = false;
                 } else
-                    shortestPath.append(" -").append('(').append(v.getWeight()).append(")-> ").append(v.getValue());
+                    shortestPath.append(" -").append('(').append(v).append(")-> ").append(v);
             }
         } catch (NullPointerException e) {
             return "There are no paths between this vertices";
@@ -117,42 +114,25 @@ public class GraphController {
     void onConnectButtonPressed(ActionEvent event) {
         if (sourceVertexBox.getValue() == null || receivingVertexBox.getValue() == null) return;
 
-        if (isNumeric(edgeWeightField.getText()))
-            graph.addEdge(sourceVertexBox.getValue(), receivingVertexBox.getValue(), Integer.parseInt(edgeWeightField.getText()));
-        else
-            graph.addEdge(sourceVertexBox.getValue(), receivingVertexBox.getValue());
+        DGraph.insertEdge(sourceVertexBox.getValue(), receivingVertexBox.getValue(), edgeWeightField.getText());
 
-        System.out.println(graph);
+        System.out.println(DGraph);
     }
-
-    private static boolean isNumeric(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            int i = Integer.parseInt(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
-
 
     @FXML
     void onAddNewVertexButtonPressed(ActionEvent event) {
         String vValue = newVertexTextField.getText().trim();
 
-        if (graph.getAdjacentVertices().containsKey(new Vertex(vValue))) return;
-
-        graph.addVertex(vValue);
+/*        if (DGraph.getAdjacentVertices().containsKey(new Vertex(vValue))) return;
+        DGraph.addVertex(vValue);
         sourceVertexBox.getItems().add(vValue);
         receivingVertexBox.getItems().add(vValue);
-        removeVertexBox.getItems().add(vValue);
+        removeVertexBox.getItems().add(vValue);*/
     }
 
     @FXML
     void initialize() {
-        graph = new Graph();
+        DGraph = new DGraph<>();
         newVertexTextField.setText("0");
         sourceVertexBox.setValue("A");
         receivingVertexBox.setValue("F");

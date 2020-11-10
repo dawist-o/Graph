@@ -1,22 +1,15 @@
 package com.dawist_o;
 
-import com.dawist_o.controller.GraphController;
 import com.dawist_o.graphview.GraphView;
 import com.dawist_o.graphview.placementstrategies.CirclePlacementStrategy;
 import com.dawist_o.graphview.placementstrategies.PlacementStrategy;
-import com.dawist_o.model.Graph;
+import com.dawist_o.model.DGraph;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import java.io.IOException;
 
 //TODO
 /*
@@ -52,7 +45,7 @@ public class Main extends Application {
 
     }
 
-    public static void updateGraphView(Graph g) {
+    public static void updateGraphView(DGraph g) {
         PlacementStrategy strategy = new CirclePlacementStrategy();
         GraphView graphView = new GraphView(g, strategy);
         graphView.setPrefWidth(400);

@@ -2,6 +2,7 @@ package com.dawist_o.graphview;
 
 import com.dawist_o.graphview.placementstrategies.CirclePlacementStrategy;
 import com.dawist_o.graphview.placementstrategies.PlacementStrategy;
+import com.dawist_o.model.DGraph;
 import com.dawist_o.model.Graph;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,18 +14,20 @@ import javafx.stage.StageStyle;
 
 public class TestGraphView extends Application {
     private static BorderPane pane;
+
     public static void main(String[] args) {
         launch(args);
     }
+
     @Override
     public void start(Stage ignored) throws Exception {
-        Graph g=new Graph();
+        Graph<String, String> g = build_flower_graph();
 
         //SmartPlacementStrategy strategy = new SmartCircularSortedPlacementStrategy();
         PlacementStrategy strategy = new CirclePlacementStrategy();
-        GraphView graphView = new GraphView(g, strategy);
+        GraphView<String,String> graphView = new GraphView<>(g, strategy);
 
-        pane=new BorderPane();
+        pane = new BorderPane();
         pane.setCenter(graphView);
 
         FXMLLoader loader = new FXMLLoader();
@@ -43,9 +46,35 @@ public class TestGraphView extends Application {
 
         graphView.init();
     }
-    public static void updateGraphView(Graph g) {
+
+    private Graph<String, String> build_flower_graph() {
+
+        Graph<String, String> g = new DGraph<>();
+
+        g.insertVertex("A");
+        g.insertVertex("B");
+        g.insertVertex("C");
+        g.insertVertex("D");
+        g.insertVertex("E");
+        g.insertVertex("F");
+        g.insertVertex("G");
+
+        g.insertEdge("A", "B", "1");
+        g.insertEdge("A", "C", "2");
+        g.insertEdge("A", "C", "22");
+        g.insertEdge("A", "D", "3");
+        g.insertEdge("A", "E", "4");
+        g.insertEdge("A", "F", "5");
+        g.insertEdge("A", "G", "6");
+
+        g.getAllPaths("A","C").forEach(System.out::println);
+
+        return g;
+    }
+
+    public static void updateGraphView(DGraph<String,String> g) {
         PlacementStrategy strategy = new CirclePlacementStrategy();
-        GraphView graphView = new GraphView(g, strategy);
+        GraphView<String,String> graphView = new GraphView<>(g, strategy);
         graphView.setPrefWidth(400);
         graphView.setMinWidth(400);
         pane.setCenter(graphView);

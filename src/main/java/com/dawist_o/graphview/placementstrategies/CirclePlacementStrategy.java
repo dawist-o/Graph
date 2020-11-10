@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public class CirclePlacementStrategy implements PlacementStrategy {
     @Override
-    public void place(double width, double height, Graph theGraph, Collection<VertexNode> vertices) {
+    public void place(double width, double height, Graph theDGraph, Collection<VertexNode> vertices) {
         Point2D center = new Point2D(width / 2, height / 2);
         double verticesCount = vertices.size();
         double degreePerVertex = 360 / verticesCount;

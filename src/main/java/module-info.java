@@ -6,8 +6,13 @@ module Graph {
 
     exports com.dawist_o.controller;
     opens com.dawist_o.controller;
+
     exports com.dawist_o.graphview;
     opens com.dawist_o.graphview;
+
+    exports com.dawist_o.model;
+    opens com.dawist_o.model;
+
     exports com.dawist_o;
     opens com.dawist_o;
 
