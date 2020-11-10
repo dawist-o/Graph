@@ -22,7 +22,7 @@ public class Vertex implements Comparable<Vertex> {
 
     @Override
     public String toString() {
-        return "{" + value + "," + weight + '}';
+        return "{v: " + value + ", w: " + weight + '}';
     }
 
     @Override
