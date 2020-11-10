@@ -6,7 +6,7 @@ import java.util.*;
 public class Graph {
     public Graph() {
         this.adjacentVertices = new HashMap<>();
-        //   fillForTest();
+        fillForTest();
     }
 
     @Override
@@ -223,7 +223,9 @@ public class Graph {
         //A : 4(B) 2(C)
         adjacentVertices.put(new Vertex("A")
                 , Arrays.asList(
+                        new Vertex("A", 3),
                         new Vertex("B", 4),
+                        new Vertex("B", 14),
                         new Vertex("C", 2),
                         new Vertex("F", 2)));
         //B : 5(C) 10(D)

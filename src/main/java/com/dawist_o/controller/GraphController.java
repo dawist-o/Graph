@@ -13,12 +13,10 @@ import javafx.scene.text.Text;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.dawist_o.Main.updateGraphView;
+
 public class GraphController {
 
-    @FXML
-    private AnchorPane vertexField;
-    @FXML
-    private Text pathText;
 
     @FXML
     private TextField shortestPathTF;
@@ -69,14 +67,17 @@ public class GraphController {
 
     @FXML
     void showGraphProperties(ActionEvent event) {
-        if (graph.getAdjacentVertices().isEmpty() ||
+/*        if (graph.getAdjacentVertices().isEmpty() ||
                 sourceVertexBox.getValue() == null && receivingVertexBox.getValue() == null) return;
 
         List<List<Vertex>> allPaths = graph.getAllPaths(sourceVertexBox.getValue(), receivingVertexBox.getValue());
+        if(allPaths.isEmpty())
+            return;
         fillShortestPathTF(allPaths);
         fillLongestPathTF(allPaths);
         fillAllPathsTA(allPaths);
-        graphCenterTF.setText(graph.getGraphCenter().getValue());
+        graphCenterTF.setText(graph.getGraphCenter().getValue());*/
+        updateGraphView(graph);
     }
 
     private void fillAllPathsTA(List<List<Vertex>> allPaths) {
@@ -153,5 +154,7 @@ public class GraphController {
     void initialize() {
         graph = new Graph();
         newVertexTextField.setText("0");
+        sourceVertexBox.setValue("A");
+        receivingVertexBox.setValue("F");
     }
 }
