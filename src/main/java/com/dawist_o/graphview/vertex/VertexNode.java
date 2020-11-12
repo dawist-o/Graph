@@ -12,22 +12,21 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class VertexNode extends Circle implements LabelledNode {
+public class VertexNode<V> extends Circle implements LabelledNode {
 
-    private final Set<VertexNode> adjacentVertices;
-
-    public Vertex getVertexValue() {
-        return vertexValue;
-    }
-
-    private Vertex vertexValue;
+    private final Set<VertexNode<V>> adjacentVertices;
+    private final Vertex<V> vertexValue;
 
     private LabelNode labelNode = null;
     private boolean isDragging;
 
     private final StyleProxy styleProxy;
 
-    public VertexNode(Vertex v, double x, double y, double radius, boolean enableMove) {
+
+    public Vertex<V> getVertexValue() {
+        return vertexValue;
+    }
+    public VertexNode(Vertex<V> v, double x, double y, double radius, boolean enableMove) {
         super(x, y, radius);
         this.isDragging = false;
 
@@ -41,7 +40,7 @@ public class VertexNode extends Circle implements LabelledNode {
         }
     }
 
-    public void addAdjacentVertices(VertexNode vertexNode) {
+    public void addAdjacentVertices(VertexNode<V> vertexNode) {
         adjacentVertices.add(vertexNode);
     }
 
@@ -99,7 +98,7 @@ public class VertexNode extends Circle implements LabelledNode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VertexNode that = (VertexNode) o;
+        VertexNode<V> that = (VertexNode) o;
         return Objects.equals(vertexValue, that.vertexValue);
     }
 
@@ -139,7 +138,6 @@ public class VertexNode extends Circle implements LabelledNode {
     }
 
     private class PointVector {
-
         double x, y;
 
         public PointVector(double x, double y) {

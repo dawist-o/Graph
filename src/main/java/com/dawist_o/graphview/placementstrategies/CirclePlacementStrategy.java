@@ -7,9 +7,9 @@ import javafx.geometry.Point2D;
 
 import java.util.Collection;
 
-public class CirclePlacementStrategy implements PlacementStrategy {
+public class CirclePlacementStrategy<V> implements PlacementStrategy<V> {
     @Override
-    public void place(double width, double height, Graph theDGraph, Collection<VertexNode> vertices) {
+    public void place(double width, double height, Graph theDGraph, Collection<VertexNode<V>> vertices) {
         Point2D center = new Point2D(width / 2, height / 2);
         double verticesCount = vertices.size();
         double degreePerVertex = 360 / verticesCount;

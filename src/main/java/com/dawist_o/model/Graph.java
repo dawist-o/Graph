@@ -3,7 +3,7 @@ package com.dawist_o.model;
 import java.util.Collection;
 import java.util.List;
 
-public interface Graph<V extends Comparable<V>, E>  {
+public interface Graph<V, E>  {
 
     void insertVertex(V value);
     void removeVertex(V vertex);

@@ -7,7 +7,7 @@ import com.dawist_o.model.Graph;
 
 import java.util.Collection;
 
-public interface PlacementStrategy {
+public interface PlacementStrategy<V> {
 
-    void place(double width, double height, Graph theDGraph, Collection<VertexNode> vertices);
+    void place(double width, double height, Graph theDGraph, Collection<VertexNode<V>> vertices);
 }

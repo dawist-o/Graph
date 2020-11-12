@@ -19,6 +19,8 @@ public class TestGraphView extends Application {
         launch(args);
     }
 
+
+
     @Override
     public void start(Stage ignored) throws Exception {
         Graph<String, String> g = build_flower_graph();
@@ -60,15 +62,17 @@ public class TestGraphView extends Application {
         g.insertVertex("G");
 
         g.insertEdge("A", "B", "1");
-        g.insertEdge("A", "C", "2");
-        g.insertEdge("A", "C", "22");
-        g.insertEdge("A", "D", "3");
-        g.insertEdge("A", "E", "4");
+        g.insertEdge("A", "B", "2");
+        g.insertEdge("B", "C", "3");
+        g.insertEdge("B", "C", "5");
+        g.insertEdge("A", "C", "7");
+
+/*        g.insertEdge("A", "E", "4");
         g.insertEdge("A", "F", "5");
-        g.insertEdge("A", "G", "6");
+        g.insertEdge("A", "G", "6");*/
 
+        System.out.println(g);
         g.getAllPaths("A","C").forEach(System.out::println);
-
         return g;
     }
 

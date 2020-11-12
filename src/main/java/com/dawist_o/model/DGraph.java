@@ -3,7 +3,7 @@ package com.dawist_o.model;
 
 import java.util.*;
 
-public class DGraph<V extends Comparable<V>, E> implements Graph<V, E> {
+public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
     private final Map<V, Vertex<V>> vertices;
     private final Map<E, Edge<E, V>> edges;
     private List<List<Vertex<V>>> allPaths;
@@ -12,25 +12,24 @@ public class DGraph<V extends Comparable<V>, E> implements Graph<V, E> {
         this.vertices = new HashMap<>();
         this.edges = new HashMap<>();
     }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(
-                String.format("Graph with %d vertices and %d edges:\n", verticesCount(), edgesCount())
-        );
+        StringBuilder sb = new StringBuilder();
         sb.append("Vertices: \n");
-        vertices.values().forEach(v->sb.append("\t").append(v.toString()).append("\n"));
+        vertices.values().forEach(v -> sb.append(v.toString()).append(",\t"));
         sb.append("\n Edges: \n");
-        edges.values().forEach(e->sb.append("\t").append(e.toString()).append("\n"));
+        edges.values().forEach(e -> sb.append("\t").append(e.toString()).append("\n"));
         return sb.toString();
     }
 
     public List<List<Vertex<V>>> getAllPaths(V source, V receiver) {
         allPaths = new ArrayList<>();
         Map<V, Boolean> isVisited = new HashMap<>();
-        for (Vertex<V> v : vertices.values()) {
-            isVisited.put(v.element(), false);
+        for (V v : vertices.keySet()) {
+            isVisited.put(v, false);
         }
-        ArrayList<Vertex<V>> pathList = new ArrayList<>();
+        List<Vertex<V>> pathList = new LinkedList<>();
         pathList.add(vertices.get(source));
         // Call recursive utility
         getAllPathsRecursive(source, receiver, isVisited, pathList);
@@ -94,7 +93,7 @@ public class DGraph<V extends Comparable<V>, E> implements Graph<V, E> {
         }
     }
 
-    public Collection<Edge<E, V>> outboundEdges(Vertex<V> outbound) {
+    public List<Edge<E, V>> outboundEdges(Vertex<V> outbound) {
         List<Edge<E, V>> outboundEdges = new ArrayList<>();
         for (Edge<E, V> edge : edges.values()) {
             if (((GEdge<E, V>) edge).outVertex.equals(outbound)) {
@@ -106,7 +105,6 @@ public class DGraph<V extends Comparable<V>, E> implements Graph<V, E> {
 
     public Collection<Edge<E, V>> incidentEdges(Vertex<V> v) {
         List<Edge<E, V>> incidentEdges = new ArrayList<>();
-
         for (Edge<E, V> edge : edges.values()) {
             if (((GEdge<E, V>) edge).contains(v)) {
                 incidentEdges.add(edge);
@@ -146,7 +144,7 @@ public class DGraph<V extends Comparable<V>, E> implements Graph<V, E> {
         return edges.size();
     }
 
-    private class GEdge<E, V extends Comparable<V>> implements Edge<E, V> {
+    private class GEdge<E extends Comparable<E>, V> implements Edge<E, V>, Comparable<E> {
         E edgeValue;
         Vertex<V> inVertex;
         Vertex<V> outVertex;
@@ -176,9 +174,14 @@ public class DGraph<V extends Comparable<V>, E> implements Graph<V, E> {
         public List<Vertex<V>> vertices() {
             return List.of(outVertex, inVertex);
         }
+
+        @Override
+        public int compareTo(E o) {
+            return edgeValue.compareTo(o);
+        }
     }
 
-    private class GVertex<V extends Comparable<V>> implements Vertex<V> {
+    private class GVertex<V> implements Vertex<V> {
         V value;
 
         @Override
@@ -209,31 +212,6 @@ public class DGraph<V extends Comparable<V>, E> implements Graph<V, E> {
         }
     }
     /*
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Vertex, List<Vertex>> entry : adjacentVertices.entrySet()) {
-            sb.append(entry.getKey()).append(": ");
-            for (Vertex adjV : entry.getValue()) {
-                sb.append(adjV).append(',');
-            }
-            sb.append('\n');
-        }
-        return sb.toString();
-    }
-
-    *//**
-     * Adds new Vertex without edges
-     *
-     * @param value value of vertex
-     **//*
-    public void addVertex(String value) {
-        adjacentVertices.put(new Vertex(value), new ArrayList<>());
-    }
-
-    public Map<Vertex, List<Vertex>> getAdjacentVertices() {
-        return adjacentVertices;
-    }
 
     private final Map<Vertex, List<Vertex>> adjacentVertices;
     private Set<Vertex> settled;
@@ -308,130 +286,5 @@ public class DGraph<V extends Comparable<V>, E> implements Graph<V, E> {
         }
         return center;
     }
-
-    private List<List<Vertex>> allPaths;
-
-    public List<List<Vertex>> getAllPaths(String source, String receiver) {
-        allPaths = new ArrayList<>();
-        Map<Vertex, Boolean> isVisited = new HashMap<>();
-        for (Vertex v : adjacentVertices.keySet()) {
-            isVisited.put(v, false);
-        }
-        ArrayList<Vertex> pathList = new ArrayList<>();
-        pathList.add(getEntryByKey(adjacentVertices, new Vertex(source)).getKey());
-        // Call recursive utility
-        getAllPathsRecursive(source, receiver, isVisited, pathList);
-
-        allPaths.sort(Comparator.comparing(cPath -> cPath.stream().mapToInt(Vertex::getWeight).sum()));
-
-        return allPaths;
-    }
-
-    private void getAllPathsRecursive(String source, String receiver,
-                                      Map<Vertex, Boolean> isVisited, List<Vertex> localPathList) {
-        if (source.equals(receiver)) {
-            allPaths.add(new ArrayList<>(localPathList));
-            // if match found then no need to traverse more till depth
-            return;
-        }
-        // Mark the current node as visited
-        isVisited.put(new Vertex(source), true);
-        // Recur for all the vertices adjacent to current vertex
-        for (Vertex currentVertex : adjacentVertices.get(new Vertex(source))) {
-            if (!isVisited.get(currentVertex)) {
-                localPathList.add(currentVertex);
-                getAllPathsRecursive(currentVertex.getValue(), receiver, isVisited, localPathList);
-                localPathList.remove(currentVertex);
-            }
-        }
-        // Mark the current node as unvisited for other paths
-        isVisited.put(new Vertex(source), false);
-    }
-
-
-    *//**
-     * returns entry with K key from Map<K,V> map
-     *
-     * @param map class that implements interface Map
-     * @param key key for entry
-     * @param <K> type of key
-     * @param <V> type of value
-     *//*
-    private static <K, V> Map.Entry<K, V> getEntryByKey(Map<K, V> map, K key) {
-        return map.entrySet()
-                .stream()
-                .filter(kvEntry -> kvEntry.getKey().equals(key)).findFirst().get();
-    }
-
-    public void removeEdge(String vertex, String edge) {
-        adjacentVertices.get(new Vertex(vertex)).remove(new Vertex(edge));
-    }
-
-    *//**
-     * Deletes vertices and edges, that contains it
-     *
-     * @param value value of vertex for remove
-     *//*
-    public void removeVertex(String value) {
-        Vertex vertexForRemove = new Vertex(value);
-        adjacentVertices.values().forEach(v -> v.remove(vertexForRemove));
-        adjacentVertices.remove(vertexForRemove);
-    }
-
-    *//**
-     * Adds edge from first vertex to second with weight
-     *
-     * @param value1 value of first vertex
-     * @param value2 value of edge vertex
-     * @param weight weight of edge between first and second vertices
-     *//*
-    public void addEdge(String value1, String value2, int weight) {
-        Vertex v1 = new Vertex(value1);
-        Vertex v2 = new Vertex(value2, weight);
-        adjacentVertices.get(v1).add(v2);
-    }
-
-    *//**
-     * Adds edge from first vertex to second with default weight(1)
-     *
-     * @param value1 value of first vertex
-     * @param value2 value of edge vertex
-     *//*
-    public void addEdge(String value1, String value2) {
-        Vertex v1 = new Vertex(value1);
-        Vertex v2 = new Vertex(value2);
-        adjacentVertices.get(v1).add(v2);
-    }
-
-    private void fillForTest() {
-        this.adjacentVertices.clear();
-        //E : 4(D)
-        adjacentVertices.put(new Vertex("E")
-                , Collections.singletonList(
-                        new Vertex("D", 4)));
-        //F :
-        adjacentVertices.put(new Vertex("F")
-                , new ArrayList<>());
-        //C : 3(E)
-        adjacentVertices.put(new Vertex("C")
-                , Collections.singletonList(
-                        new Vertex("E", 3)));
-        //D : 11(F)
-        adjacentVertices.put(new Vertex("D")
-                , Collections.singletonList(
-                        new Vertex("F", 11)));
-        //A : 4(B) 2(C)
-        adjacentVertices.put(new Vertex("A")
-                , Arrays.asList(
-                        new Vertex("A", 3),
-                        new Vertex("B", 4),
-                        new Vertex("B", 14),
-                        new Vertex("C", 2),
-                        new Vertex("F", 2)));
-        //B : 5(C) 10(D)
-        adjacentVertices.put(new Vertex("B")
-                , Arrays.asList(
-                        new Vertex("C", 5),
-                        new Vertex("D", 10)));
-    }*/
+*/
 }

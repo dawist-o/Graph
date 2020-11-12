@@ -25,14 +25,12 @@ import java.util.*;
 public class GraphView<V extends Comparable<V>, E> extends Pane {
     private final Graph<V, E> g;
     private final PlacementStrategy strategy;
-    private Map<Vertex<V>, VertexNode> vertexNodes;
-    private final Map<Vertex<V>, VertexNode> vertices;
+    private final Map<Vertex<V>, VertexNode<V>> vertices;
     private final Map<Edge<E, V>, GraphEdge> edges;
 
-    public GraphView(Graph<V, E> g, PlacementStrategy strategy) {
+    public GraphView(Graph<V, E> g, PlacementStrategy<V> strategy) {
         this.g = g;
         this.strategy = strategy;
-        this.vertexNodes = new HashMap<>();
         this.vertices = new HashMap<>();
         this.edges = new HashMap<>();
         loadStylesheet(null);
@@ -44,8 +42,7 @@ public class GraphView<V extends Comparable<V>, E> extends Pane {
             return;
         //putting all vertices into vertexNodes
         for (Vertex<V> vertex : g.vertices()) {
-            VertexNode vertexNode = new VertexNode(vertex, 0, 0, 15, true);
-            vertexNodes.put(vertex, vertexNode);
+            VertexNode<V> vertexNode = new VertexNode<>(vertex, 0, 0, 15, true);
             vertices.put(vertex, vertexNode);
             LabelNode labelNode = new LabelNode(vertex.element().toString());
             vertexNode.attachLabel(labelNode);
@@ -55,7 +52,7 @@ public class GraphView<V extends Comparable<V>, E> extends Pane {
         for (Vertex<V> outboundVertex : vertices.keySet()) {
             Iterable<Edge<E, V>> outboundEdges = g.outboundEdges(outboundVertex);
             for (Edge<E, V> outEdge : outboundEdges) {
-                VertexNode inboundVertex = vertices.get(outEdge.vertices().get(1));
+                VertexNode<V> inboundVertex = vertices.get(outEdge.vertices().get(1));
                 GraphEdge edge = createEdge(inboundVertex, vertices.get(outboundVertex)
                         , outEdge.element());
                 this.getChildren().add(0, (Node) edge);
@@ -75,7 +72,7 @@ public class GraphView<V extends Comparable<V>, E> extends Pane {
     }
 
 
-    private GraphEdge createEdge(VertexNode in, VertexNode out, E weight) {
+    private GraphEdge createEdge(VertexNode<V> in, VertexNode<V> out, E weight) {
         GraphEdge edge;
         if (in == out || getTotalEdgesBetween(in.getVertexValue(), out.getVertexValue()) > 1)
             edge = new CurveEdge(in, out);
