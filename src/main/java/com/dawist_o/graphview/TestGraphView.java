@@ -71,8 +71,7 @@ public class TestGraphView extends Application {
         g.insertEdge("A", "F", "5");
         g.insertEdge("A", "G", "6");*/
 
-        System.out.println(g);
-        g.getAllPaths("A","C").forEach(System.out::println);
+        g.getAllPaths("A","С").forEach(System.out::println);
         return g;
     }
 
