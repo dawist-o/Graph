@@ -15,8 +15,11 @@ public interface Graph<V, E>  {
     int edgesCount();
 
     List<List<Edge<E,V>>> getAllPaths(V source, V receiver);
+    Vertex<V> getGraphCenter();
+
     Collection<Vertex<V>> vertices();
     Collection<Edge<E, V>> edges();
+
     Collection<Edge<E, V>> outboundEdges(Vertex<V> outbound);
     Collection<Edge<E, V>> incidentEdges(Vertex<V> v);
 }

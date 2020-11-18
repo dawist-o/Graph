@@ -1,6 +1,8 @@
 package com.dawist_o.model;
 
 
+import com.dawist_o.exceptions.EmptyGraphException;
+
 import java.util.*;
 
 public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
@@ -32,19 +34,76 @@ public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
             isVisited.put(e, false);
         }
         //check all paths from source vertex`
-        List<Edge<E,V>> pathList=new LinkedList<>();
-        outboundEdges(vertices.get(source)).forEach(outEdge->{
+        List<Edge<E, V>> pathList = new LinkedList<>();
+        outboundEdges(vertices.get(source)).forEach(outEdge -> {
             pathList.clear();
             pathList.add(outEdge);
             getAllPathsRecursive(outEdge, receiver, isVisited, pathList);
         });
         allPaths_Edges.sort((o1, o2) -> {
-            Integer firstListSum = o1.stream().mapToInt(v -> Integer.parseInt(v.element().toString())).sum();
-            Integer secondListSum = o2.stream().mapToInt(v -> Integer.parseInt(v.element().toString())).sum();
+            Integer firstListSum = o1.stream().mapToInt(edge -> Integer.parseInt(edge.element().toString())).sum();
+            Integer secondListSum = o2.stream().mapToInt(edge -> Integer.parseInt(edge.element().toString())).sum();
             return firstListSum.compareTo(secondListSum);
         });
         return allPaths_Edges;
     }
+
+    @Override
+    public Vertex<V> getGraphCenter() {
+        if (vertices.isEmpty())
+            throw new EmptyGraphException("This graph doesn't contains any vertices");
+        Map<Vertex<V>, Integer> eccentricityMap = new HashMap<>();
+        vertices.values().forEach(value -> eccentricityMap.put(value, 0));
+        //count eccentricity for all vertices
+        for (Vertex<V> inV : vertices.values()) {
+            for (Vertex<V> outV : vertices.values()) {
+                List<List<Edge<E, V>>> paths = getAllPaths(outV.element(), inV.element());
+                if (!paths.isEmpty()) {
+                    int distBetweenOutAndIn = paths.get(0).stream()
+                            .mapToInt(edge -> Integer.parseInt(edge.element().toString())).sum();
+                    if (eccentricityMap.get(inV) <= distBetweenOutAndIn)
+                        eccentricityMap.put(inV, distBetweenOutAndIn);
+                }
+            }
+        }
+        //center vertex = vertex with minimal eccentricity
+        Vertex<V> center = null;
+        int minEccentricity = Integer.MAX_VALUE;
+        for (Vertex<V> v : eccentricityMap.keySet()) {
+            if (eccentricityMap.get(v) < minEccentricity && eccentricityMap.get(v) != 0) {
+                center = v;
+                minEccentricity = eccentricityMap.get(v);
+            }
+        }
+        return center;
+    }
+
+    /*    public Vertex getGraphCenter() {
+        Map<Vertex, Integer> eccentricityMap = new LinkedHashMap<>();
+        for (Vertex ver : adjacentVertices.keySet()) {
+            eccentricityMap.put(ver, 0);
+        }
+        for (Map.Entry<Vertex, List<Vertex>> external_entry : adjacentVertices.entrySet()) {
+            for (Map.Entry<Vertex, List<Vertex>> inner_entry : adjacentVertices.entrySet()) {
+                getShortestPathBetween(external_entry.getKey().getValue(), inner_entry.getKey().getValue());
+                for (Map.Entry<Vertex, Integer> distance : dist.entrySet()) {
+                    if (distance.getValue() != Integer.MAX_VALUE
+                            && eccentricityMap.get(distance.getKey()) <= distance.getValue()) {
+                        eccentricityMap.put(distance.getKey(), distance.getValue());
+                    }
+                }
+            }
+        }
+        Vertex center = null;
+        int minEx = Integer.MAX_VALUE;
+        for (Map.Entry<Vertex, Integer> ex : eccentricityMap.entrySet()) {
+            if (minEx > ex.getValue() && ex.getValue() != 0) {
+                center = ex.getKey();
+                minEx = ex.getValue();
+            }
+        }
+        return center;
+    }*/
 
     private void getAllPathsRecursive(Edge<E, V> source, V receiver,
                                       Map<Edge<E, V>, Boolean> isVisited, List<Edge<E, V>> localPathList) {
