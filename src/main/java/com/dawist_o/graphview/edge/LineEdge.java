@@ -1,25 +1,29 @@
 package com.dawist_o.graphview.edge;
 
 import com.dawist_o.graphview.labels.LabelNode;
-import com.dawist_o.graphview.labels.LabelledNode;
 import com.dawist_o.graphview.placementutilities.PlacementManager;
 import com.dawist_o.graphview.style.StyleProxy;
 import com.dawist_o.graphview.vertex.VertexNode;
+import com.dawist_o.model.Edge;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
-public class LineEdge extends Line implements GraphEdge {
+public class LineEdge<E, V> extends Line implements GraphEdge<E, V> {
 
-    private final VertexNode inVertex;
-    private final VertexNode outVertex;
+    private final VertexNode<V> inVertex;
+    private final VertexNode<V> outVertex;
+    private final Edge<E, V> edge;
+
     private final StyleProxy styleProxy;
     private EdgeArrow arrow;
     private LabelNode labelNode;
 
-    public LineEdge(VertexNode inVertex, VertexNode outVertex) {
+
+    public LineEdge(Edge<E, V> edge, VertexNode<V> inVertex, VertexNode<V> outVertex) {
         this.inVertex = inVertex;
         this.outVertex = outVertex;
+        this.edge = edge;
 
         styleProxy = new StyleProxy(this);
         styleProxy.addStyleClass("edge");
@@ -60,6 +64,11 @@ public class LineEdge extends Line implements GraphEdge {
     @Override
     public EdgeArrow getAttachedArrow() {
         return arrow;
+    }
+
+    @Override
+    public Edge<E, V> getEdge() {
+        return this.edge;
     }
 
     @Override
