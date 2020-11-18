@@ -1,17 +1,17 @@
 package com.dawist_o.graphview.edge;
 
 import com.dawist_o.graphview.labels.LabelNode;
-import com.dawist_o.graphview.labels.LabelledNode;
 import com.dawist_o.graphview.placementutilities.PlacementManager;
 import com.dawist_o.graphview.style.StyleProxy;
 import com.dawist_o.graphview.vertex.VertexNode;
+import com.dawist_o.model.Edge;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
-public class CurveEdge extends CubicCurve implements GraphEdge {
+public class CurveEdge<E,V> extends CubicCurve implements GraphEdge<E,V> {
 
 
     private final VertexNode inVertex;
@@ -19,13 +19,19 @@ public class CurveEdge extends CubicCurve implements GraphEdge {
     private final StyleProxy styleProxy;
     private EdgeArrow arrow;
     private LabelNode labelNode;
+    private final Edge<E,V> edge;
 
     private final int MAX_ANGLE=20;
     private double randomAngleFactor =0;
 
-    public CurveEdge(VertexNode inVertex, VertexNode outVertex) {
+    public CurveEdge(Edge<E,V> edge, VertexNode inVertex, VertexNode outVertex) {
+        this(edge,inVertex,outVertex,0);
+    }
+
+    public CurveEdge(Edge<E,V> edge,VertexNode inVertex, VertexNode outVertex, int edgesBetween) {
         this.inVertex = inVertex;
         this.outVertex = outVertex;
+        this.edge=edge;
 
         styleProxy = new StyleProxy(this);
         styleProxy.addStyleClass("edge");
@@ -35,7 +41,7 @@ public class CurveEdge extends CubicCurve implements GraphEdge {
         this.endXProperty().bind(inVertex.centerXProperty());
         this.endYProperty().bind(inVertex.centerYProperty());
 
-        randomAngleFactor =Math.random();
+        randomAngleFactor = edgesBetween==0 ? 0 : 1.0 / edgesBetween ;
         addListeners();
     }
 
@@ -120,6 +126,11 @@ public class CurveEdge extends CubicCurve implements GraphEdge {
     @Override
     public EdgeArrow getAttachedArrow() {
         return arrow;
+    }
+
+    @Override
+    public Edge getEdge() {
+        return this.edge;
     }
 
     @Override
