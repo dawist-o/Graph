@@ -4,8 +4,8 @@ module Graph {
     requires javafx.fxml;
     requires javafx.graphics;
 
-    exports com.dawist_o.controller;
-    opens com.dawist_o.controller;
+    exports com.dawist_o.controllers;
+    opens com.dawist_o.controllers;
 
     exports com.dawist_o.graphview;
     opens com.dawist_o.graphview;
