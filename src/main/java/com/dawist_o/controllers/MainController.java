@@ -13,11 +13,15 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import static com.dawist_o.controllers.GraphController.receiveV;
+import static com.dawist_o.controllers.GraphController.sourceV;
 
 public class MainController {
     public static Stage stage;
     public static GraphView<String, String> graphView;
     private static BorderPane borderPane;
+
+    private static volatile boolean running;
 
     public static void setMainStage() throws IOException {
         borderPane = new BorderPane();
@@ -27,9 +31,9 @@ public class MainController {
         AnchorPane root = loader.load();
         borderPane.setRight(root);
 
-        // Graph<String, String> g = build_flower_graph();
+        //Graph<String, String> g = build_flower_graph();
         Graph<String, String> g = new DGraph<>();
-        PlacementStrategy<String> strategy = new CirclePlacementStrategy<>();
+        PlacementStrategy<String, String> strategy = new CirclePlacementStrategy<>();
         graphView = new GraphView<>(g, strategy);
         borderPane.setCenter(graphView);
         // graphView.initPaths("A", "C");
@@ -42,22 +46,27 @@ public class MainController {
         stage.setScene(scene);
         stage.show();
 
+
+        stage.setOnCloseRequest((event) -> running = false);
+
         graphView.init();
         autoUpdate();
     }
 
     public static void autoUpdate() {
-        boolean running = true;
-        final int UPDATE_TIME = 5000;
+        running = true;
+        final int UPDATE_TIME = 500;
         new Thread(() -> {
             while (running) {
-                System.out.println("qwe");
                 try {
                     Thread.sleep(UPDATE_TIME);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 graphView.update();
+                if(sourceV!=null && receiveV!=null){
+                    graphView.highlightPaths(sourceV,receiveV);
+                }
             }
         }).start();
     }
