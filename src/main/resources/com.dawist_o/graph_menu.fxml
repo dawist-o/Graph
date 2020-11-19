@@ -9,60 +9,57 @@
 
 <AnchorPane minWidth="-Infinity" prefHeight="600.0" prefWidth="270.0" style="-fx-background-color: #AAFCB8;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dawist_o.controllers.GraphController">
    <children>
-      <TextField fx:id="newVertexTextField" layoutX="19.0" layoutY="46.0" prefHeight="25.0" prefWidth="120.0" />
-      <ComboBox fx:id="sourceVertexBox" layoutX="67.0" layoutY="155.0" prefHeight="25.0" prefWidth="80.0" />
-      <Button layoutX="160.0" layoutY="223.0" mnemonicParsing="false" onAction="#onConnectButtonPressed" prefHeight="25.0" prefWidth="95.0" text="Create edge" />
-      <Text layoutX="107.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edges" textAlignment="CENTER" wrappingWidth="70.0">
+      <TextField fx:id="newVertexTF" layoutX="85.0" layoutY="47.0" prefHeight="25.0" prefWidth="120.0" />
+      <ComboBox fx:id="sourceVertexBox" layoutX="125.0" layoutY="230.0" prefHeight="25.0" prefWidth="80.0" />
+      <Button layoutX="97.0" layoutY="334.0" mnemonicParsing="false" onAction="#onCreateEdgeButtonPressed" prefHeight="25.0" prefWidth="95.0" text="Create edge" />
+      <Text layoutX="106.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edges" textAlignment="CENTER" wrappingWidth="70.0">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="19.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="43.33333333333326">
+      <Text layoutX="77.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="43.33333333333326">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="19.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" textAlignment="CENTER" wrappingWidth="43.33333333333337">
+      <Text layoutX="77.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" textAlignment="CENTER" wrappingWidth="43.33333333333337">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <ComboBox fx:id="receivingVertexBox" layoutX="67.0" layoutY="186.0" prefHeight="25.0" prefWidth="80.0" />
-      <Text layoutX="14.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weigth" wrappingWidth="52.00002034505201">
+      <ComboBox fx:id="receivingVertexBox" layoutX="125.0" layoutY="261.0" prefHeight="25.0" prefWidth="80.0" />
+      <Text layoutX="72.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Weigth" wrappingWidth="52.00002034505201">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <TextField fx:id="edgeWeightField" layoutX="67.0" layoutY="223.0" prefHeight="25.0" prefWidth="80.0" />
-      <Button layoutX="63.0" layoutY="525.0" mnemonicParsing="false" onAction="#update" prefHeight="38.0" prefWidth="169.0" text="update">
-         <font>
-            <Font size="14.0" />
-         </font></Button>
-      <ComboBox fx:id="removeVertexBox" layoutX="19.0" layoutY="82.0" prefHeight="25.0" prefWidth="120.0" />
-      <Button layoutX="148.0" layoutY="82.0" mnemonicParsing="false" onAction="#onRemoveVertexPressed" prefHeight="25.0" prefWidth="95.0" text="Remove vertex" />
-      <Button layoutX="160.0" layoutY="186.0" mnemonicParsing="false" onAction="#onRemoveEdgePressed" prefHeight="25.0" prefWidth="95.0" text="Remove edge" />
-      <Button layoutX="148.0" layoutY="46.0" mnemonicParsing="false" onAction="#onAddNewVertexButtonPressed" prefHeight="25.0" prefWidth="95.0" text="Add vertex" />
+      <TextField fx:id="edgeWeightField" layoutX="125.0" layoutY="298.0" prefHeight="25.0" prefWidth="80.0" />
+      <ComboBox fx:id="removeVertexBox" layoutX="85.0" layoutY="115.0" prefHeight="25.0" prefWidth="120.0" />
+      <Button layoutX="97.0" layoutY="155.0" mnemonicParsing="false" onAction="#onRemoveVertexPressed" prefHeight="25.0" prefWidth="95.0" text="Remove vertex" />
+      <Button layoutX="153.0" layoutY="375.0" mnemonicParsing="false" onAction="#onRemoveEdgePressed" prefHeight="25.0" prefWidth="95.0" text="Remove edge" />
+      <Button layoutX="97.0" layoutY="79.0" mnemonicParsing="false" onAction="#onAddNewVertexButtonPressed" prefHeight="25.0" prefWidth="95.0" text="Add vertex" />
       <Text layoutX="102.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vertex" textAlignment="CENTER" wrappingWidth="80.0">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="19.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="43.33333333333326">
+      <Text layoutX="122.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="43.33333333333326">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="19.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" textAlignment="CENTER" wrappingWidth="43.33333333333337">
+      <Text layoutX="119.0" layoutY="541.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" textAlignment="CENTER" wrappingWidth="43.33333333333337">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <ComboBox fx:id="sourceVertexBox1" layoutX="67.0" layoutY="328.0" prefHeight="25.0" prefWidth="80.0" />
-      <ComboBox fx:id="receivingVertexBox1" layoutX="67.0" layoutY="359.0" prefHeight="25.0" prefWidth="80.0" />
-      <Text layoutX="100.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Path" textAlignment="CENTER" wrappingWidth="70.0">
+      <ComboBox fx:id="pathFrom" layoutX="101.0" layoutY="490.0" prefHeight="25.0" prefWidth="80.0" />
+      <ComboBox fx:id="pathTo" layoutX="101.0" layoutY="553.0" prefHeight="25.0" prefWidth="80.0" />
+      <Text layoutX="81.0" layoutY="443.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Highlight paths" textAlignment="CENTER" wrappingWidth="120.00000000000011">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
+      <ComboBox fx:id="removeEdgeBox" layoutX="44.0" layoutY="375.0" prefHeight="25.0" prefWidth="80.0" />
    </children>
 </AnchorPane>
