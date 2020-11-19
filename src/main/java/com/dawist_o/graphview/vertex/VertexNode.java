@@ -2,6 +2,7 @@ package com.dawist_o.graphview.vertex;
 
 import com.dawist_o.graphview.labels.LabelNode;
 import com.dawist_o.graphview.labels.LabelledNode;
+import com.dawist_o.graphview.style.StylableNode;
 import com.dawist_o.graphview.style.StyleProxy;
 import com.dawist_o.model.Vertex;
 import javafx.scene.Cursor;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class VertexNode<V> extends Circle implements LabelledNode {
+public class VertexNode<V> extends Circle implements LabelledNode, StylableNode {
 
     private final Set<VertexNode<V>> adjacentVertices;
     private final Vertex<V> vertexValue;
@@ -134,8 +135,24 @@ public class VertexNode<V> extends Circle implements LabelledNode {
 
     @Override
     public LabelNode getLabel() {
-        return labelNode;
+        return this.labelNode;
     }
+
+    @Override
+    public void setStyleClass(String cssClass) {
+        styleProxy.setStyleClass(cssClass);
+    }
+
+    @Override
+    public void addStyleClass(String cssClass) {
+        styleProxy.addStyleClass(cssClass);
+    }
+
+    @Override
+    public boolean removeStyleClass(String cssClass) {
+        return styleProxy.removeStyleClass(cssClass);
+    }
+
 
     private class PointVector {
         double x, y;
