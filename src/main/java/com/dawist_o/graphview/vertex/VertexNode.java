@@ -22,10 +22,6 @@ public class VertexNode<V> extends Circle implements LabelledNode {
 
     private final StyleProxy styleProxy;
 
-
-    public Vertex<V> getVertexValue() {
-        return vertexValue;
-    }
     public VertexNode(Vertex<V> v, double x, double y, double radius, boolean enableMove) {
         super(x, y, radius);
         this.isDragging = false;
@@ -123,6 +119,10 @@ public class VertexNode<V> extends Circle implements LabelledNode {
     public void setPosition(double x, double y) {
         setCenterX(x);
         setCenterY(y);
+    }
+
+    public Vertex<V> getVertexValue() {
+        return vertexValue;
     }
 
     @Override
