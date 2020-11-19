@@ -22,7 +22,7 @@ public class EdgeArrow extends Path implements StylableNode {
 
     @Override
     public void setStyleClass(String cssClass) {
-        styleProxy.setStyle(cssClass);
+        styleProxy.setStyleClass(cssClass);
     }
 
     @Override
