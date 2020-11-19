@@ -1,7 +1,9 @@
 package com.dawist_o.controllers;
 
-import com.dawist_o.model.DGraph;
-import com.dawist_o.model.Graph;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import com.dawist_o.model.Vertex;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -10,7 +12,7 @@ import javafx.scene.control.TextField;
 public class GraphController {
 
     @FXML
-    private TextField newVertexTextField;
+    private TextField newVertexTF;
 
     @FXML
     private ComboBox<String> sourceVertexBox;
@@ -19,52 +21,96 @@ public class GraphController {
     private ComboBox<String> receivingVertexBox;
 
     @FXML
+    private TextField edgeWeightField;
+
+    @FXML
     private ComboBox<String> removeVertexBox;
 
     @FXML
-    private TextField edgeWeightField;
+    private ComboBox<String> pathFrom;
 
-    private Graph<String, String> DGraph;
+    @FXML
+    private ComboBox<String> pathTo;
+
+    @FXML
+    private ComboBox<String> removeEdgeBox;
+
+    public static String sourceV;
+    public static String receiveV;
+
+    @FXML
+    public void initialize(){
+        pathFrom.getSelectionModel().selectedItemProperty().addListener((options,oldValue, newValue)->{
+            sourceV=newValue;
+        });
+        pathTo.getSelectionModel().selectedItemProperty().addListener((options,oldValue, newValue)->{
+            receiveV=newValue;
+        });
+    }
+
+    @FXML
+    void onAddNewVertexButtonPressed(ActionEvent event) {
+        String newV = newVertexTF.getText().trim();
+
+        if (newV.isEmpty() || newV.isBlank()) return;
+
+        MainController.graphView.getGraph().insertVertex(newV);
+
+        removeVertexBox.getItems().add(newV);
+
+        sourceVertexBox.getItems().add(newV);
+        receivingVertexBox.getItems().add(newV);
+
+        pathFrom.getItems().add(newV);
+        pathTo.getItems().add(newV);
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    @FXML
+    void onCreateEdgeButtonPressed(ActionEvent event) {
+        String weight = edgeWeightField.getText().trim();
+        if (sourceVertexBox.getValue() == null || receivingVertexBox.getValue() == null
+                || !isNumeric(weight) || removeEdgeBox.getItems().contains(weight)) return;
+
+        MainController.graphView.getGraph().insertEdge(sourceVertexBox.getValue(),
+                receivingVertexBox.getValue(), weight);
+
+        removeEdgeBox.getItems().add(weight);
+    }
 
     @FXML
     void onRemoveEdgePressed(ActionEvent event) {
-        if (sourceVertexBox.getValue() == null || receivingVertexBox.getValue() == null) return;
-        //DGraph.removeEdge();
+        if (removeEdgeBox.getValue() == null) return;
+
+        MainController.graphView.getGraph().removeEdge(removeEdgeBox.getValue());
+        removeEdgeBox.getItems().remove(removeEdgeBox.getValue());
     }
 
     @FXML
     void onRemoveVertexPressed(ActionEvent event) {
         if (removeVertexBox.getValue() == null) return;
 
-        DGraph.removeVertex(removeVertexBox.getValue());
-        sourceVertexBox.getItems().remove(removeVertexBox.getValue());
-        receivingVertexBox.getItems().remove(removeVertexBox.getValue());
-        removeVertexBox.getItems().remove(removeVertexBox.getValue());
-    }
+        String vertexToRemove = removeVertexBox.getValue().trim();
+        System.out.println(MainController.graphView.getGraph());
+        MainController.graphView.getGraph().removeVertex(vertexToRemove);
+        System.out.println(MainController.graphView.getGraph());
+        sourceVertexBox.getItems().remove(vertexToRemove);
+        receivingVertexBox.getItems().remove(vertexToRemove);
 
-    @FXML
-    void update(ActionEvent event) {
-        MainController.graphView.getG();
-    }
+        pathFrom.getItems().remove(vertexToRemove);
+        pathTo.getItems().remove(vertexToRemove);
 
-
-    @FXML
-    void onConnectButtonPressed(ActionEvent event) {
-        if (sourceVertexBox.getValue() == null || receivingVertexBox.getValue() == null) return;
-
-        DGraph.insertEdge(sourceVertexBox.getValue(), receivingVertexBox.getValue(), edgeWeightField.getText());
-
-        System.out.println(DGraph);
-    }
-
-    @FXML
-    void onAddNewVertexButtonPressed(ActionEvent event) {
-        String vValue = newVertexTextField.getText().trim();
-        MainController.graphView.getG().insertVertex(vValue);
-    }
-
-    @FXML
-    void initialize() {
-        DGraph = new DGraph<>();
+        removeVertexBox.getItems().remove(vertexToRemove);
     }
 }
