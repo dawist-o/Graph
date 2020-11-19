@@ -18,7 +18,7 @@ public class PlacementManager {
         Point2D rotated = new Point2D(result.getX() * cos - result.getY() * sin,
                 result.getX() * sin + result.getY() * cos);
 
-        return rotated .add(center);
+        return rotated.add(center);
     }
 
     public static DoubleBinding atan2(final ObservableDoubleValue y, final ObservableDoubleValue x) {
