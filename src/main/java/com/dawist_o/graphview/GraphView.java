@@ -130,7 +130,18 @@ public class GraphView<V, E> extends Pane {
         Platform.runLater(() -> {
             removeNodes();
             insertNodes();
+            updateCenterVertex();
         });
+    }
+
+    private void updateCenterVertex() {
+        if(graph.verticesCount()==0) return;
+
+        vertices.values().forEach(v->v.setStyleClass("vertex"));
+
+        Vertex<V> center = graph.getGraphCenter();
+        if(center!=null)
+            vertices.get(center).setStyleClass("center-vertex");
     }
 
     private Bounds getPlacementBounds() {
@@ -336,26 +347,26 @@ public class GraphView<V, E> extends Pane {
             List<List<Edge<E, V>>> allPaths = graph.getAllPaths(sourceV, receiveV);
             System.out.println(allPaths);
             if (allPaths.size() != 0) {
-                for (Edge<E, V> edge : allPaths.get(0)) {
-                    edges.get(edge).setStyle("-fx-stroke: #32e0c4");//shortest
-                    edges.get(edge).getAttachedArrow().setStyle("-fx-stroke: #32e0c4");
-                }
                 if (allPaths.size() == 2) {
                     for (Edge<E, V> edge : allPaths.get(1)) {
-                        edges.get(edge).setStyle("-fx-stroke: #db6400");//longest
-                        edges.get(edge).getAttachedArrow().setStyle("-fx-stroke: #db6400");
+                        edges.get(edge).setStyle("-fx-stroke: #EA2B1F");//longest
+                        edges.get(edge).getAttachedArrow().setStyle("-fx-stroke: #EA2B1F");
                     }
                 } else if (allPaths.size() > 2) {
-                    for (int i = 1; i < allPaths.size() - 2; i++) {
+                    for (int i = 1; i <= allPaths.size() - 2; i++) {
                         for (Edge<E, V> edge : allPaths.get(i)) {
                             edges.get(edge).setStyle("-fx-stroke: #ffe05d");//default
                             edges.get(edge).getAttachedArrow().setStyle("-fx-stroke: #ffe05d");
                         }
                     }
                     for (Edge<E, V> edge : allPaths.get(allPaths.size() - 1)) {
-                        edges.get(edge).setStyle("-fx-stroke: #db6400");//longest
-                        edges.get(edge).getAttachedArrow().setStyle("-fx-stroke: #db6400");
+                        edges.get(edge).setStyle("-fx-stroke: #EA2B1F");//longest
+                        edges.get(edge).getAttachedArrow().setStyle("-fx-stroke: #EA2B1F");
                     }
+                }
+                for (Edge<E, V> edge : allPaths.get(0)) {
+                    edges.get(edge).setStyle("-fx-stroke: #32e0c4");//shortest
+                    edges.get(edge).getAttachedArrow().setStyle("-fx-stroke: #32e0c4");
                 }
             }
         });

@@ -9,6 +9,13 @@
     -fx-fill: #B1DFF7;
 }
 
+.center-vertex {
+    -fx-stroke-width: 3;
+    -fx-stroke: #EDAE49;
+    -fx-stroke-type: inside; /* you should keep this if using arrows */
+    -fx-fill: #EA2B1F;
+}
+
 .vertex-label {
     -fx-font: bold 8pt "sans-serif";
 }
