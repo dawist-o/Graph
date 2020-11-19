@@ -6,11 +6,11 @@ import com.dawist_o.model.Graph;
 import java.util.Collection;
 import java.util.Random;
 
-public class RandomPlacementStrategy<V> implements PlacementStrategy<V> {
+public class RandomPlacementStrategy<V,E> implements PlacementStrategy<V,E> {
 
 
     @Override
-    public void place(double width, double height, Graph theDGraph, Collection<VertexNode<V>> vertices) {
+    public void place(double width, double height, Graph<V,E> theDGraph, Collection<VertexNode<V>> vertices) {
         Random r = new Random();
         for (VertexNode<V> v : vertices) {
             double x = r.nextDouble() * width;
