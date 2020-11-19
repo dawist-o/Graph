@@ -45,6 +45,27 @@ public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
         });
         return allPaths_Edges;
     }
+    private void getAllPathsRecursive(Edge<E, V> source, V receiver,
+                                      Map<Edge<E, V>, Boolean> isVisited, List<Edge<E, V>> localPathList) {
+
+        if (source.vertices().get(1).element().equals(receiver)) {
+            allPaths_Edges.add(new ArrayList<>(localPathList));
+            // if match found then no need to traverse more till depth
+            return;
+        }
+        // Mark the current node as visited
+        isVisited.put(source, true);
+        // Recur for all the vertices adjacent to current vertex
+        for (Edge<E, V> currentEdge : outboundEdges(source.vertices().get(1))) {
+            if (!isVisited.get(currentEdge)) {
+                localPathList.add(currentEdge);
+                getAllPathsRecursive(currentEdge, receiver, isVisited, localPathList);
+                localPathList.remove(currentEdge);
+            }
+        }
+        // Mark the current node as unvisited for other paths
+        isVisited.put(source, false);
+    }
 
     @Override
     public Vertex<V> getGraphCenter() {
@@ -74,28 +95,6 @@ public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
             }
         }
         return center;
-    }
-
-    private void getAllPathsRecursive(Edge<E, V> source, V receiver,
-                                      Map<Edge<E, V>, Boolean> isVisited, List<Edge<E, V>> localPathList) {
-
-        if (source.vertices().get(1).element().equals(receiver)) {
-            allPaths_Edges.add(new ArrayList<>(localPathList));
-            // if match found then no need to traverse more till depth
-            return;
-        }
-        // Mark the current node as visited
-        isVisited.put(source, true);
-        // Recur for all the vertices adjacent to current vertex
-        for (Edge<E, V> currentEdge : outboundEdges(source.vertices().get(1))) {
-            if (!isVisited.get(currentEdge)) {
-                localPathList.add(currentEdge);
-                getAllPathsRecursive(currentEdge, receiver, isVisited, localPathList);
-                localPathList.remove(currentEdge);
-            }
-        }
-        // Mark the current node as unvisited for other paths
-        isVisited.put(source, false);
     }
 
     @Override
