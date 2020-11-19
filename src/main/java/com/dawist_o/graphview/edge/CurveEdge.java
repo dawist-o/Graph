@@ -14,8 +14,8 @@ import javafx.scene.transform.Translate;
 public class CurveEdge<E,V> extends CubicCurve implements GraphEdge<E,V> {
 
 
-    private final VertexNode inVertex;
-    private final VertexNode outVertex;
+    private final VertexNode<V> inVertex;
+    private final VertexNode<V> outVertex;
     private final StyleProxy styleProxy;
     private EdgeArrow arrow;
     private LabelNode labelNode;
@@ -24,11 +24,11 @@ public class CurveEdge<E,V> extends CubicCurve implements GraphEdge<E,V> {
     private final int MAX_ANGLE=20;
     private double randomAngleFactor =0;
 
-    public CurveEdge(Edge<E,V> edge, VertexNode inVertex, VertexNode outVertex) {
+    public CurveEdge(Edge<E,V> edge, VertexNode<V> inVertex, VertexNode<V> outVertex) {
         this(edge,inVertex,outVertex,0);
     }
 
-    public CurveEdge(Edge<E,V> edge,VertexNode inVertex, VertexNode outVertex, int edgesBetween) {
+    public CurveEdge(Edge<E,V> edge,VertexNode<V> inVertex, VertexNode<V> outVertex, int edgesBetween) {
         this.inVertex = inVertex;
         this.outVertex = outVertex;
         this.edge=edge;
@@ -43,6 +43,7 @@ public class CurveEdge<E,V> extends CubicCurve implements GraphEdge<E,V> {
 
         randomAngleFactor = edgesBetween==0 ? 0 : 1.0 / edgesBetween ;
         addListeners();
+        update();
     }
 
     private void update(){
@@ -85,18 +86,10 @@ public class CurveEdge<E,V> extends CubicCurve implements GraphEdge<E,V> {
     }
 
     private void addListeners() {
-        this.startXProperty().addListener((ObservableValue<? extends Number> ov, Number t, Number t1) -> {
-            update();
-        });
-        this.startYProperty().addListener((ObservableValue<? extends Number> ov, Number t, Number t1) -> {
-            update();
-        });
-        this.endXProperty().addListener((ObservableValue<? extends Number> ov, Number t, Number t1) -> {
-            update();
-        });
-        this.endYProperty().addListener((ObservableValue<? extends Number> ov, Number t, Number t1) -> {
-            update();
-        });
+        this.startXProperty().addListener((ObservableValue<? extends Number> ov, Number t, Number t1) -> update());
+        this.startYProperty().addListener((ObservableValue<? extends Number> ov, Number t, Number t1) -> update());
+        this.endXProperty().addListener((ObservableValue<? extends Number> ov, Number t, Number t1) -> update());
+        this.endYProperty().addListener((ObservableValue<? extends Number> ov, Number t, Number t1) -> update());
     }
 
     @Override
@@ -129,7 +122,7 @@ public class CurveEdge<E,V> extends CubicCurve implements GraphEdge<E,V> {
     }
 
     @Override
-    public Edge getEdge() {
+    public Edge<E,V> getEdge() {
         return this.edge;
     }
 
