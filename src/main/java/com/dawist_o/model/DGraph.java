@@ -8,7 +8,7 @@ import java.util.*;
 public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
     private final Map<V, Vertex<V>> vertices;
     private final Map<E, Edge<E, V>> edges;
-    private List<List<Vertex<V>>> allPaths;
+    private List<List<Edge<E, V>>> allPaths_Edges;
 
     public DGraph() {
         this.vertices = new HashMap<>();
@@ -24,8 +24,6 @@ public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
         edges.values().forEach(e -> sb.append("\t").append(e.toString()).append("\n"));
         return sb.toString();
     }
-
-    private List<List<Edge<E, V>>> allPaths_Edges;
 
     public List<List<Edge<E, V>>> getAllPaths(V source, V receiver) {
         allPaths_Edges = new LinkedList<>();
@@ -77,33 +75,6 @@ public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
         }
         return center;
     }
-
-    /*    public Vertex getGraphCenter() {
-        Map<Vertex, Integer> eccentricityMap = new LinkedHashMap<>();
-        for (Vertex ver : adjacentVertices.keySet()) {
-            eccentricityMap.put(ver, 0);
-        }
-        for (Map.Entry<Vertex, List<Vertex>> external_entry : adjacentVertices.entrySet()) {
-            for (Map.Entry<Vertex, List<Vertex>> inner_entry : adjacentVertices.entrySet()) {
-                getShortestPathBetween(external_entry.getKey().getValue(), inner_entry.getKey().getValue());
-                for (Map.Entry<Vertex, Integer> distance : dist.entrySet()) {
-                    if (distance.getValue() != Integer.MAX_VALUE
-                            && eccentricityMap.get(distance.getKey()) <= distance.getValue()) {
-                        eccentricityMap.put(distance.getKey(), distance.getValue());
-                    }
-                }
-            }
-        }
-        Vertex center = null;
-        int minEx = Integer.MAX_VALUE;
-        for (Map.Entry<Vertex, Integer> ex : eccentricityMap.entrySet()) {
-            if (minEx > ex.getValue() && ex.getValue() != 0) {
-                center = ex.getKey();
-                minEx = ex.getValue();
-            }
-        }
-        return center;
-    }*/
 
     private void getAllPathsRecursive(Edge<E, V> source, V receiver,
                                       Map<Edge<E, V>, Boolean> isVisited, List<Edge<E, V>> localPathList) {
@@ -161,6 +132,7 @@ public class DGraph<V, E extends Comparable<E>> implements Graph<V, E> {
         for (Edge<E, V> edge : incidentEdges) {
             edges.remove(edge.element());
         }
+        vertices.remove(vertex);
     }
 
     public List<Edge<E, V>> outboundEdges(Vertex<V> outbound) {
