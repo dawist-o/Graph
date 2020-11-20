@@ -205,10 +205,6 @@ public class GraphView<V, E> extends Pane {
 
                 GraphEdge<E, V> graphEdge = createEdge(edge, graphVertexIn, graphVertexOut);
 
-                EdgeArrow arrow = new EdgeArrow();
-                graphEdge.attachArrow(arrow);
-                this.getChildren().add(arrow);
-
                 addEdge(graphEdge, edge);
             }
         }
@@ -295,8 +291,6 @@ public class GraphView<V, E> extends Pane {
     }
 
     private void removeEdge(GraphEdge<E, V> e) {
-        this.getChildren().remove(e);
-
         EdgeArrow attachedArrow = e.getAttachedArrow();
         if (attachedArrow != null) {
             this.getChildren().remove(attachedArrow);
@@ -306,6 +300,8 @@ public class GraphView<V, E> extends Pane {
         if (attachedLabel != null) {
             this.getChildren().remove(attachedLabel);
         }
+
+        this.getChildren().remove(e);
     }
 
 

@@ -63,7 +63,7 @@ public class LineEdge<E, V> extends Line implements GraphEdge<E, V> {
 
     @Override
     public EdgeArrow getAttachedArrow() {
-        return arrow;
+        return this.arrow;
     }
 
     @Override

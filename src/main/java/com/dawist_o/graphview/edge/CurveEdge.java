@@ -118,7 +118,7 @@ public class CurveEdge<E,V> extends CubicCurve implements GraphEdge<E,V> {
 
     @Override
     public EdgeArrow getAttachedArrow() {
-        return arrow;
+        return this.arrow;
     }
 
     @Override

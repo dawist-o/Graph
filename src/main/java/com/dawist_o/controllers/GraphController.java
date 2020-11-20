@@ -102,9 +102,9 @@ public class GraphController {
         if (removeVertexBox.getValue() == null) return;
 
         String vertexToRemove = removeVertexBox.getValue().trim();
-        System.out.println(MainController.graphView.getGraph());
+
         MainController.graphView.getGraph().removeVertex(vertexToRemove);
-        System.out.println(MainController.graphView.getGraph());
+
         sourceVertexBox.getItems().remove(vertexToRemove);
         receivingVertexBox.getItems().remove(vertexToRemove);
 
