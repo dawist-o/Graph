@@ -1,9 +1,5 @@
 package com.dawist_o.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.dawist_o.model.Vertex;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;

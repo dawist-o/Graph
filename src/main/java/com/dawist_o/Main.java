@@ -11,14 +11,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-//TODO
-/*
- * кратчайший путь
- * самый длинный путь
- * все пути между вершинами по возрастанию
- * центр графа
- * */
-
 public class Main extends Application {
     public static void main(String[] args) {
         launch(args);

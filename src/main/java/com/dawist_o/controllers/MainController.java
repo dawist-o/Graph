@@ -36,7 +36,6 @@ public class MainController {
         PlacementStrategy<String, String> strategy = new CirclePlacementStrategy<>();
         graphView = new GraphView<>(g, strategy);
         borderPane.setCenter(graphView);
-        // graphView.initPaths("A", "C");
 
         Scene scene = new Scene(borderPane, 900, 600);
         stage = new Stage(StageStyle.DECORATED);
